@@ -1,0 +1,1590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>국내 최초 빅데이터 기반 레저보트 거래 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #0A1628;
+            --deep-navy: #050B15;
+            --ocean-blue: #1E3A5F;
+            --light-blue: #4A90E2;
+            --gold: #D4AF37;
+            --light-gold: #F4E4C1;
+            --white: #FFFFFF;
+            --light-gray: #F5F7FA;
+            --text-gray: #5A6C7D;
+        }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+            color: var(--navy);
+            background: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-menu a:not(.nav-cta):hover {
+            color: var(--gold);
+        }
+
+        .nav-menu a:not(.nav-cta)::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s;
+        }
+
+        .nav-menu a:not(.nav-cta):hover::after {
+            width: 100%;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--ocean-blue), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .nav-cta {
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
+            color: var(--navy);
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 70px;
+            min-height: 90vh;
+            background: linear-gradient(135deg, #050B15 0%, #0A1628 50%, #1E3A5F 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
+                linear-gradient(135deg, #050B15 0%, #0A1628 50%, #1E3A5F 100%);
+            z-index: 1;
+        }
+
+        .hero-bg-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(212, 175, 55, 0.03) 2px, rgba(212, 175, 55, 0.03) 4px),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(212, 175, 55, 0.03) 2px, rgba(212, 175, 55, 0.03) 4px);
+        }
+
+        .hero-bg-image::after {
+            content: '⛵';
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.05;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(5, 11, 21, 0.8) 0%, rgba(10, 22, 40, 0.7) 50%, rgba(30, 58, 95, 0.8) 100%);
+            z-index: 2;
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 10;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(-50px); }
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .float-icon {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .float-icon:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .float-icon:nth-child(2) { left: 80%; top: 30%; animation-delay: 3s; }
+        .float-icon:nth-child(3) { left: 20%; top: 70%; animation-delay: 6s; }
+        .float-icon:nth-child(4) { left: 70%; top: 60%; animation-delay: 9s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 184, 0, 0.2);
+            color: var(--gold);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 184, 0, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .hero h1 .highlight {
+            color: var(--gold);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .cta-primary {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(255, 184, 0, 0.3);
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 184, 0, 0.4);
+        }
+
+        .cta-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 8rem 2rem;
+            background: white;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+        }
+
+        .about-content {
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            margin-top: 4rem;
+            align-items: center;
+        }
+
+        .about-text {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .about-text p {
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            line-height: 1.9;
+        }
+
+        .about-values {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .value-card {
+            background: var(--light-gray);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--gold);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .value-card h4 {
+            font-size: 1.3rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .value-card p {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 8rem 2rem;
+            background: var(--light-gray);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .problem-card {
+            background: white;
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .problem-card h3 {
+            font-size: 1.4rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .problem-card p {
+            color: var(--text-gray);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        /* Why Us Section */
+        .why-us-section {
+            padding: 8rem 2rem;
+            background: white;
+        }
+
+        .features-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+            margin-top: 4rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .feature-icon-box {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--ocean-blue), var(--light-blue));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.2);
+        }
+
+        .feature-content h3 {
+            font-size: 1.4rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1rem 0;
+        }
+
+        .feature-list li {
+            color: var(--text-gray);
+            padding: 0.4rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--ocean-blue);
+            font-weight: bold;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(0, 102, 204, 0.1), rgba(74, 144, 226, 0.1));
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border-left: 4px solid var(--ocean-blue);
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        /* Before/After Section */
+        .before-after-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--ocean-blue) 100%);
+            color: white;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.8rem 1.2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .comparison-label {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .comparison-values {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+            flex: 1;
+        }
+
+        .before-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            opacity: 0.6;
+            text-decoration: line-through;
+        }
+
+        .arrow {
+            font-size: 1.2rem;
+            color: var(--gold);
+        }
+
+        .after-value {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .improvement {
+            background: rgba(255, 184, 0, 0.2);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        /* Vision Section */
+        .vision-section {
+            padding: 8rem 2rem;
+            background: var(--light-gray);
+            text-align: center;
+        }
+
+        .vision-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .vision-image {
+            width: 100%;
+            max-width: 600px;
+            height: 350px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--ocean-blue) 100%);
+            border-radius: 20px;
+            margin: 3rem auto;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.3);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vision-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(212, 175, 55, 0.15) 0%, transparent 50%);
+        }
+
+        .vision-image::after {
+            content: '';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0;
+        }
+
+        @keyframes visionPulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.5; }
+        }
+
+        .vision-badge {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem 3rem;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 1;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .vision-badge-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--navy), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .vision-badge-subtitle {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .vision-message {
+            font-size: 1.8rem;
+            color: var(--navy);
+            font-weight: 700;
+            margin: 2rem 0;
+            line-height: 1.6;
+        }
+
+        .vision-sub {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            line-height: 1.8;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 8rem 2rem;
+            background: linear-gradient(180deg, var(--light-gray) 0%, white 100%);
+        }
+
+        .form-wrapper {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .form-header h2 {
+            font-size: 2.2rem;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .form-header p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .benefit-box {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--ocean-blue) 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            text-align: center;
+            border: 2px solid var(--gold);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+            animation: benefitGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes benefitGlow {
+            0%, 100% { transform: translate(0, 0); opacity: 0.5; }
+            50% { transform: translate(-25%, -25%); opacity: 0.8; }
+        }
+
+        .benefit-box p {
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-box strong {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--navy);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .required {
+            color: #FF4444;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E0E7EE;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(10, 22, 40, 0.05);
+            color: var(--navy);
+            transition: all 0.3s;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-group textarea::placeholder {
+            color: rgba(90, 108, 125, 0.5);
+        }
+
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.15);
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        /* Checkbox Grid */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .checkbox-item-new {
+            position: relative;
+        }
+
+        .checkbox-item-new input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-label-new {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem 1rem;
+            background: white;
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            min-height: 100px;
+        }
+
+        .checkbox-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .checkbox-text {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.95rem;
+        }
+
+        .checkbox-item-new input[type="checkbox"]:checked + .checkbox-label-new {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--ocean-blue) 100%);
+            border-color: var(--gold);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .checkbox-item-new input[type="checkbox"]:checked + .checkbox-label-new .checkbox-text {
+            color: white;
+        }
+
+        .checkbox-item-new input[type="checkbox"]:checked + .checkbox-label-new .checkbox-icon {
+            transform: scale(1.2);
+        }
+
+        .checkbox-label-new:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: var(--gold);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--light-gold) 100%);
+            color: var(--navy);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s;
+            margin-top: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-button:hover::before {
+            left: 100%;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.6);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Scroll to Top Button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--gold), var(--light-gold));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .scroll-to-top::before {
+            content: '↑';
+            font-size: 1.5rem;
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-info {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-info p {
+            margin: 0.5rem 0;
+            opacity: 0.8;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Success Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            margin: 2rem;
+            animation: modalSlide 0.3s ease-out;
+        }
+
+        @keyframes modalSlide {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content h3 {
+            font-size: 1.8rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            color: var(--text-gray);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .modal-close {
+            background: var(--ocean-blue);
+            color: white;
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: var(--navy);
+        }
+
+        /* Fade In Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .comparison-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .about-content {
+                gap: 3rem;
+            }
+
+            .about-values {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                gap: 2rem;
+            }
+
+            .feature-item {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .problem-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .cta-primary,
+            .cta-secondary {
+                width: 100%;
+                text-align: center;
+            }
+
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-wrapper {
+                padding: 2rem;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+
+            .nav-menu {
+                gap: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">너울</div>
+            <ul class="nav-menu">
+                <li><a href="#about">회사소개</a></li>
+                <li><a href="#features">솔루션</a></li>
+                <li><a href="#apply" class="nav-cta">사전신청 하기</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-elements">
+            <div class="float-icon">⛵</div>
+            <div class="float-icon">🚤</div>
+            <div class="float-icon">⚓</div>
+            <div class="float-icon">🌊</div>
+        </div>
+        <div class="hero-bg-image"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">🎉 국내 최초 출시 준비중</div>
+                <h1>국내 최초, 빅데이터 기반<br><span class="highlight">레저보트 전문 거래 플랫폼</span></h1>
+                <p>투명한 시세, 표준화된 정보, 안전한 거래를<br>한 곳에서 경험하세요</p>
+                <div class="cta-buttons">
+                    <a href="#apply" class="cta-primary">사전신청하고 혜택받기</a>
+                    <a href="#features" class="cta-secondary">자세히 알아보기</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">너울 소개</h2>
+                <p class="section-subtitle">레저보트 거래의 새로운 기준을 제시합니다</p>
+            </div>
+
+            <div class="about-content fade-in">
+                <div class="about-text">
+                    <h3>우리의 시작</h3>
+                    <p>너울은 국내 레저보트 시장의 투명성과 신뢰성을 높이기 위해 시작되었습니다. 현재 레저보트 거래 시장은 정보의 비대칭성, 가격 불투명성, 그리고 신뢰할 수 있는 플랫폼의 부재로 많은 어려움을 겪고 있습니다.</p>
+                    
+                    <h3 style="margin-top: 2.5rem;">우리의 목표</h3>
+                    <p>빅데이터와 AI 기술을 활용하여 모든 거래자가 공정하고 투명한 환경에서 레저보트를 거래할 수 있도록 합니다. 단순한 중개 플랫폼을 넘어, 레저보트 문화를 선도하는 생태계를 만들어갑니다.</p>
+                </div>
+
+                <div class="about-values">
+                    <div class="value-card">
+                        <div class="value-icon">🎯</div>
+                        <h4>투명성</h4>
+                        <p>모든 거래 정보를 명확하고 투명하게 공개합니다</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h4>신뢰성</h4>
+                        <p>검증된 매물과 판매자로 안전한 거래를 보장합니다</p>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🚀</div>
+                        <h4>혁신성</h4>
+                        <p>최신 기술로 편리한 거래 경험을 제공합니다</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">레저보트 거래, 이런 점이 불편하지 않으셨나요?</h2>
+                <p class="section-subtitle">현재 시장의 문제를 해결합니다</p>
+            </div>
+
+            <div class="problem-grid">
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">📱</div>
+                    <h3>정보의 분산과 불균형</h3>
+                    <p>체계화된 전문 거래 플랫폼이 없어 정보를 찾기가 너무 어렵고 각각의 매물정보가 너무 다릅니다</p>
+                </div>
+
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">❓</div>
+                    <h3>불투명한 가격</h3>
+                    <p>이 가격이 적정가인지 비싼 건지 판단할 기준이 없습니다</p>
+                </div>
+
+                <div class="problem-card fade-in">
+                    <div class="problem-icon">⚠️</div>
+                    <h3>거래 신뢰성 불안</h3>
+                    <p>허위 매물인지, 판매자를 믿을 수 있는지 확인할 방법이 없습니다</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section id="features" class="why-us-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title">저희는 다릅니다</h2>
+                <p class="section-subtitle">체계적이고 투명한 거래 시스템</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item fade-in">
+                    <div class="feature-icon-box">✅</div>
+                    <div class="feature-content">
+                        <h3>국내 최초 체계적 표준화</h3>
+                        <ul class="feature-list">
+                            <li>요트·보트 타입(세일, 파워, 크루저 등)</li>
+                            <li>브랜드, 피트, 엔진, 연식, 연료, 가격 별 구분</li>
+                            <li>쉬운 비교 및 검색 기능</li>
+                        </ul>
+                        <div class="feature-highlight">
+                            모든 정보를 표준화하여 쉽게 비교 가능한 국내 최초 전문 레저보트 거래 플랫폼
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-item fade-in">
+                    <div class="feature-icon-box">📊</div>
+                    <div class="feature-content">
+                        <h3>빅데이터 기반 표준 시세</h3>
+                        <ul class="feature-list">
+                            <li>축적된 거래 데이터 기반 실시간 시세 제공</li>
+                            <li>가격 분포도에서 해당 매물의 위치 확인</li>
+                            <li>AI 기반 적정가 분석</li>
+                        </ul>
+                        <div class="feature-highlight">
+                            현재 가격이 시장 대비 어디에 위치하는지 한눈에 파악
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-item fade-in">
+                    <div class="feature-icon-box">🛡️</div>
+                    <div class="feature-content">
+                        <h3>실매물 및 판매자 검증</h3>
+                        <ul class="feature-list">
+                            <li>실매물 확인 시스템</li>
+                            <li>판매자 신원 검증</li>
+                            <li>안전 거래 보증 서비스</li>
+                        </ul>
+                        <div class="feature-highlight">
+                            안전하고 신뢰할 수 있는 거래 환경 제공
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Before/After Section -->
+    <section class="before-after-section">
+        <div class="container">
+            <div class="section-header fade-in">
+                <h2 class="section-title" style="color: white;">이렇게 달라집니다</h2>
+                <p class="section-subtitle" style="color: rgba(255,255,255,0.8);">사용자 경험 개선 효과</p>
+            </div>
+
+            <div class="comparison-grid">
+                <div class="comparison-card fade-in">
+                    <div class="comparison-label">정보 탐색 시간</div>
+                    <div class="comparison-values">
+                        <span class="before-value">10시간</span>
+                        <span class="arrow">→</span>
+                        <span class="after-value">2시간</span>
+                    </div>
+                    <div class="improvement">⚡ 80% 단축</div>
+                </div>
+
+                <div class="comparison-card fade-in">
+                    <div class="comparison-label">거래 완료 시간</div>
+                    <div class="comparison-values">
+                        <span class="before-value">1~2주</span>
+                        <span class="arrow">→</span>
+                        <span class="after-value">2~3일</span>
+                    </div>
+                    <div class="improvement">⚡ 80% 단축</div>
+                </div>
+
+                <div class="comparison-card fade-in">
+                    <div class="comparison-label">매물 비교 만족도</div>
+                    <div class="comparison-values">
+                        <span class="before-value">직접 비교</span>
+                        <span class="arrow">→</span>
+                        <span class="after-value">AI 맞춤 추천</span>
+                    </div>
+                    <div class="improvement">✨ 만족도 2배</div>
+                </div>
+
+                <div class="comparison-card fade-in">
+                    <div class="comparison-label">거래 리스크</div>
+                    <div class="comparison-values">
+                        <span class="before-value">10~15%</span>
+                        <span class="arrow">→</span>
+                        <span class="after-value">1% 미만</span>
+                    </div>
+                    <div class="improvement">🛡️ 손실비용 95% 예방</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="vision-section">
+        <div class="container">
+            <div class="vision-content fade-in">
+                <h2 class="section-title">우리가 만들고 싶은 미래</h2>
+                <div class="vision-image">
+                    <div class="vision-badge">
+                        <div class="vision-badge-title">신뢰 & 투명성</div>
+                        <div class="vision-badge-subtitle">Trusted Platform</div>
+                    </div>
+                </div>
+                <p class="vision-message">투명하고 신뢰할 수 있는<br>레저보트 거래 문화를 만들어갑니다</p>
+                <p class="vision-sub">누구나 안심하고 레저보트를 거래할 수 있는<br>표준화된 거래 생태계의 선발주자</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section id="apply" class="form-section">
+        <div class="container">
+            <div class="form-wrapper fade-in">
+                <div class="form-header">
+                    <h2>지금 사전신청하고<br>특별한 혜택을 받아보세요</h2>
+                    <p>서비스 오픈 시 우선 이용권과 특별 할인 혜택을 드립니다</p>
+                </div>
+
+                <div class="benefit-box">
+                    <p style="font-size: 1.1rem; margin-bottom: 0.8rem; font-weight: 600;">🎁 사전신청 이벤트</p>
+                    <p style="font-size: 1rem; line-height: 1.8;">사전 신청을 완료해주신 <strong style="font-size: 1.2rem;">다섯 분</strong>을 선정하여<br>스타벅스 커피 기프티콘을 드립니다!</p>
+                </div>
+
+                <form id="preApplicationForm">
+                    <div class="form-group">
+                        <label>이름 <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required placeholder="홍길동">
+                    </div>
+
+                    <div class="form-group">
+                        <label>연락처 <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="010-1234-5678" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>이메일 <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="example@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>관심 기능 <span class="required">*</span> (다중 선택 가능)</label>
+                        <div class="checkbox-grid">
+                            <div class="checkbox-item-new">
+                                <input type="checkbox" id="feature1" name="features" value="시세 분석">
+                                <label for="feature1" class="checkbox-label-new">
+                                    <span class="checkbox-icon">📊</span>
+                                    <span class="checkbox-text">시세 분석</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-item-new">
+                                <input type="checkbox" id="feature2" name="features" value="검증 시스템">
+                                <label for="feature2" class="checkbox-label-new">
+                                    <span class="checkbox-icon">🛡️</span>
+                                    <span class="checkbox-text">검증 시스템</span>
+                                </label>
+                            </div>
+                            <div class="checkbox-item-new">
+                                <input type="checkbox" id="feature3" name="features" value="맞춤 추천">
+                                <label for="feature3" class="checkbox-label-new">
+                                    <span class="checkbox-icon">✨</span>
+                                    <span class="checkbox-text">맞춤 추천</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>추가 의견 (선택)</label>
+                        <textarea id="comments" name="comments" rows="4" placeholder="너울에 바라는 점이나 추가 의견을 자유롭게 작성해주세요"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-button">사전신청 완료하기</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-info">
+                <h3 style="margin-bottom: 1rem;">너울</h3>
+                <p>투명하고 신뢰할 수 있는 레저보트 거래 플랫폼</p>
+            </div>
+            <div class="footer-links">
+                <a href="mailto:oootime1030@gmail.com">📧 oootime1030@gmail.com</a>
+                <a href="#">개인정보처리방침</a>
+                <a href="#">이용약관</a>
+            </div>
+            <p style="margin-top: 2rem; opacity: 0.6;">&copy; 2025 너울. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-to-top" id="scrollToTop"></div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✅</div>
+            <h3>사전신청이 완료되었습니다!</h3>
+            <p>귀하의 정보가 성공적으로 등록되었습니다.<br>서비스 오픈 시 이메일로 안내해드리겠습니다.<br><br>감사합니다! 🎉</p>
+            <button class="modal-close" onclick="closeModal()">확인</button>
+        </div>
+    </div>
+
+    <script>
+        // Fade-in on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 70;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Form validation and submission
+        document.getElementById('preApplicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const features = document.querySelectorAll('input[name="features"]:checked');
+            if (features.length === 0) {
+                alert('관심 기능을 최소 1개 이상 선택해주세요.');
+                return;
+            }
+
+            const formData = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                features: Array.from(features).map(cb => cb.value).join(', '),
+                comments: document.getElementById('comments').value,
+                timestamp: new Date().toLocaleString('ko-KR')
+            };
+
+            const submitButton = this.querySelector('.submit-button');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = '신청 중...';
+            submitButton.disabled = true;
+
+            // Google Apps Script Web App URL
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbx8NqwAf4lTvRqQgU26nyxtzJRG5txuDcS5BBZs5SvgHEqFUUqb09K6TRttwrLgC-ZKOQ/exec';
+
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                document.getElementById('successModal').classList.add('active');
+                this.reset();
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+                console.log('Form submitted:', formData);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('신청이 완료되었습니다!');
+                this.reset();
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            });
+        });
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 3 && value.length <= 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3);
+            } else if (value.length > 7) {
+                value = value.slice(0, 3) + '-' + value.slice(3, 7) + '-' + value.slice(7, 11);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
